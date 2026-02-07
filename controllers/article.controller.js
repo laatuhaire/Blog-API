@@ -129,10 +129,45 @@ const deleteArticleById = async (req, res, next) => {
     }
 };
 
+// SEARCH ARTICLES BY KEYWORD 
+const searchArticles = async (req, res, next) => {
+    const { keyword } = req.query; 
+    if (!keyword) {
+        return res.status(400).json({
+            message: 'Please provide a search keyword'
+        });
+    }
+
+    try {
+        // Use case-insensitive search on title or content
+        const articles = await ArticleModel.find({
+            $or: [
+                { title: { $regex: keyword, $options: 'i' } },
+                { content: { $regex: keyword, $options: 'i' } }
+            ]
+        });
+
+        if (!articles.length) {
+            return res.status(404).json({
+                message: `No articles found matching "${keyword}"`
+            });
+        }
+
+        return res.status(200).json({
+            message: 'Search results',
+            data: articles
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
 module.exports = {
     postArticle,
     getArticleById,
     getAllArticles,
     updateArticleById,
     deleteArticleById,
+    searchArticles,
 };

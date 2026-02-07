@@ -20,7 +20,6 @@ app.use(RequestLogger);
 
 app.use('/api/articles', ArticleRoutes);
 
-// FIX: error handler must be last
 app.use(errorHandler);
 
 app.listen(PORT, () => {

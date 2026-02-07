@@ -1,20 +1,32 @@
 const express = require('express');
 
-const {
-    postArticle,
-    getAllArticles,
-    getArticleById,
-    updateArticleById,
+const { 
+    postArticle, 
+    getAllArticles, 
+    getArticleById, 
+    updateArticleById, 
     deleteArticleById,
+    searchArticles // bonus
 } = require('../controllers/article.controller.js');
 
 const router = express.Router();
 
-// FIX: avoid double /articles
-router.post('/', postArticle);
-router.get('/', getAllArticles);
-router.get('/:id', getArticleById);
-router.put('/:id', updateArticleById);
-router.delete('/:id', deleteArticleById);
+// CREATE
+router.post('/articles', postArticle);
+
+// GET ALL
+router.get('/articles', getAllArticles);
+
+// SEARCH
+router.get('/articles/search', searchArticles);
+
+// GET BY ID
+router.get('/articles/:id', getArticleById);
+
+// UPDATE
+router.put('/articles/:id', updateArticleById);
+
+// DELETE
+router.delete('/articles/:id', deleteArticleById);
 
 module.exports = router;
