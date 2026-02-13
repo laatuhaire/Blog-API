@@ -1,32 +1,50 @@
 const express = require('express');
+const router = express.Router();
 
+const ArticleModel = require('../models/article.model');
 const { 
     postArticle, 
     getAllArticles, 
     getArticleById, 
     updateArticleById, 
     deleteArticleById,
-    searchArticles // bonus
+    searchArticles
 } = require('../controllers/article.controller.js');
 
-const router = express.Router();
+const { 
+    validateArticle,
+    validateUpdatedArticle
+} = require('../validations/post.validations.js');
 
-// CREATE
-router.post('/articles', postArticle);
+const { requireAuth, requireOwnership } = require('../middlewares/auth.middleware');
 
-// GET ALL
-router.get('/articles', getAllArticles);
+// CREATE ARTICLE
+router.post('/articles', requireAuth, validateArticle, postArticle);
 
-// SEARCH
-router.get('/articles/search', searchArticles);
+// GET ALL ARTICLES
+router.get('/articles', requireAuth, getAllArticles);
 
-// GET BY ID
-router.get('/articles/:id', getArticleById);
+// SEARCH ARTICLES
+router.get('/articles/search', requireAuth, searchArticles);
 
-// UPDATE
-router.put('/articles/:id', updateArticleById);
+// GET ARTICLE BY ID
+router.get('/articles/:id', requireAuth, getArticleById);
 
-// DELETE
-router.delete('/articles/:id', deleteArticleById);
+// UPDATE ARTICLE
+router.put(
+    '/articles/:id', 
+    requireAuth, 
+    requireOwnership(ArticleModel), 
+    validateUpdatedArticle, 
+    updateArticleById
+);
+
+// DELETE ARTICLE
+router.delete(
+    '/articles/:id', 
+    requireAuth, 
+    requireOwnership(ArticleModel), 
+    deleteArticleById
+);
 
 module.exports = router;

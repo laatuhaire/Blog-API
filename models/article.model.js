@@ -16,6 +16,11 @@ const articleSchema = new mongoose.Schema(
             type: String,
             default: 'Guest',
         },
+        userId: {                       // << Added userId field
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true,
+        },
     },
     { timestamps: true }
 );

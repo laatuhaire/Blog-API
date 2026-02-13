@@ -2,6 +2,9 @@ const Joi = require('joi');
 const ArticleModel = require('../models/article.model');
 
 // CREATE ARTICLE
+
+
+// CREATE ARTICLE
 const postArticle = async (req, res, next) => {
     const schema = Joi.object({
         title: Joi.string().min(5).required(),
@@ -17,7 +20,11 @@ const postArticle = async (req, res, next) => {
     }
 
     try {
-        const newArticle = new ArticleModel(value);
+        // Attach logged-in user's ID here
+        const newArticle = new ArticleModel({
+            ...value,
+            userId: req.user.userId,  // userId from auth middleware
+        });
         await newArticle.save();
 
         return res.status(201).json({
@@ -28,6 +35,7 @@ const postArticle = async (req, res, next) => {
         next(error);
     }
 };
+
 
 // GET ALL ARTICLES
 const getAllArticles = async (req, res, next) => {
@@ -108,6 +116,8 @@ const updateArticleById = async (req, res, next) => {
         next(error);
     }
 };
+
+
 
 // DELETE ARTICLE
 const deleteArticleById = async (req, res, next) => {
