@@ -38,6 +38,7 @@ A RESTful Blog API built with Node.js and Express.
 npm install express cors joi helmet  mongoose ----
 
 ```bash
-git clone https://github.com/yourusername/blog-api.git
+https://github.com/laatuhaire/Blog-API/tree/main
+git clone https://github.com/laatuhaire/Blog-API.git
 cd blog-api
 npm install
