@@ -1,7 +1,8 @@
 const UserModel = require('../models/user.model');
+const joi = require('joi');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { hashedPassword } = require('../bcrypt'); 
+const { hashedPassword } = require('../utils/bcrypt.js'); 
 
 //1 end point
 const registerUser = async (req, res, next) => {

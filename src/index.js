@@ -1,7 +1,9 @@
-const express = require('express');
+const express =  require('express');
 const cors = require('cors');
 const connectDB = require('./config/connectDB.js');
-const RequestLogger = require('./middlewares/logger.js');
+const logRequest = require('./middlewares/logger.js');
+
+
 const errorHandler = require('./middlewares/errorHandler.js');
 
 const ArticleRoutes = require('./routes/article.route.js');
@@ -13,10 +15,10 @@ app.use(express.json());
 
 app.use(cors());
 
-app.use(RequestLogger);
+app.use(logRequest);
 
-app.use('/api', ArticleRoutes);
 app.use('/api/users', UserRoutes);
+app.use('/api', ArticleRoutes);
 
 app.use(errorHandler);
 
