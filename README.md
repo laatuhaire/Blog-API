@@ -3,9 +3,7 @@ A RESTful Blog API built with Node.js, Express, and MongoDB.
 This API allows users to register, authenticate, and create or manage blog articles.
 The project demonstrates backend concepts such as authentication, middleware, validation, file uploads, and error handling.
 
-LIVE ON RENDER ---
-TESTED USING POSTMAN ---
-
+LIVE ON RENDER ---https://blog-api-2-2k6d.onrender.com
 
 Features
 User registration and login
