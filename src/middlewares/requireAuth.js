@@ -1,7 +1,7 @@
+// src/middlewares/requireAuth.js
 const jwt = require('jsonwebtoken');
 const UserModel = require('../models/user.model');
 
-// Middleware to require authentication
 const requireAuth = async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
@@ -11,18 +11,19 @@ const requireAuth = async (req, res, next) => {
 
     const token = authHeader.replace('Bearer ', '');
 
-
     try {
         const payload = jwt.verify(token, process.env.JWT_SECRET);
 
-        const user = await UserModel.findById(payload.userId);
+        // Attach full user document
+        const user = await UserModel.findById(payload.id); // payload.id matches generateAccessToken
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        req.user = user; // attach logged-in user to request
+        req.user = user; // use user._id in article controller
         next();
     } catch (error) {
+        console.error('JWT verify error:', error.message);
         res.status(401).json({ error: 'Invalid or expired token' });
     }
 };

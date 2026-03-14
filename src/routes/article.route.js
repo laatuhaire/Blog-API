@@ -1,3 +1,4 @@
+// src/routes/article.route.js
 const express = require('express');
 const router = express.Router();
 const requireAuth = require('../middlewares/requireAuth.js');
@@ -19,6 +20,7 @@ const {
 
 const { requireOwnership } = require('../middlewares/auth.middleware');
 
+// Apply JWT middleware to all article routes
 router.use(requireAuth);
 
 // CREATE ARTICLE
@@ -35,7 +37,7 @@ router.get('/articles/:id', getArticleById);
 
 // UPDATE ARTICLE
 router.put(
-    '/articles/:id',   
+    '/articles/:id',
     requireOwnership(ArticleModel), 
     validateUpdatedArticle, 
     updateArticleById
@@ -43,7 +45,7 @@ router.put(
 
 // DELETE ARTICLE
 router.delete(
-    '/articles/:id',  
+    '/articles/:id',
     requireOwnership(ArticleModel), 
     deleteArticleById
 );

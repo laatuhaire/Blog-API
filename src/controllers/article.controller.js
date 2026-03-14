@@ -1,8 +1,6 @@
+// src/controllers/article.controller.js
 const Joi = require('joi');
 const ArticleModel = require('../models/article.model');
-
-// CREATE ARTICLE
-
 
 // CREATE ARTICLE
 const postArticle = async (req, res, next) => {
@@ -12,19 +10,19 @@ const postArticle = async (req, res, next) => {
         author: Joi.string().optional().default('Guest'),
     });
 
-    const value = req.body; 
-    const { error } = schema.validate(value);
+    const { error } = schema.validate(req.body);
 
     if (error) {
         return res.status(400).json('Please provide article title and content');
     }
 
     try {
-        // Attach logged-in user's ID here
+        // Attach logged-in user's ID from requireAuth middleware
         const newArticle = new ArticleModel({
-            ...value,
-            userId: req.user.userId,  // userId from auth middleware
+            ...req.body,
+            userId: req.user._id,  
         });
+
         await newArticle.save();
 
         return res.status(201).json({
@@ -35,7 +33,6 @@ const postArticle = async (req, res, next) => {
         next(error);
     }
 };
-
 
 // GET ALL ARTICLES
 const getAllArticles = async (req, res, next) => {
@@ -85,7 +82,7 @@ const updateArticleById = async (req, res, next) => {
         author: Joi.string().optional(),
     });
 
-    const value = req.body; 
+    const value = req.body;
     const { error } = schema.validate(value);
 
     if (error) {
@@ -117,8 +114,6 @@ const updateArticleById = async (req, res, next) => {
     }
 };
 
-
-
 // DELETE ARTICLE
 const deleteArticleById = async (req, res, next) => {
     try {
@@ -134,17 +129,16 @@ const deleteArticleById = async (req, res, next) => {
             message: 'Article deleted',
         });
     } catch (error) {
-        const NativeError = error; 
-        next(NativeError);
+        next(error);
     }
 };
 
-// SEARCH ARTICLES BY KEYWORD 
+// SEARCH ARTICLES BY KEYWORD
 const searchArticles = async (req, res, next) => {
-    const { keyword } = req.query; 
+    const { keyword } = req.query;
     if (!keyword) {
         return res.status(400).json({
-            message: 'Please provide a search keyword'
+            message: 'Please provide a search keyword',
         });
     }
 
@@ -153,27 +147,24 @@ const searchArticles = async (req, res, next) => {
         const articles = await ArticleModel.find({
             $or: [
                 { title: { $regex: keyword, $options: 'i' } },
-                { content: { $regex: keyword, $options: 'i' } }
-            ]
+                { content: { $regex: keyword, $options: 'i' } },
+            ],
         });
 
         if (!articles.length) {
             return res.status(404).json({
-                message: `No articles found matching "${keyword}"`
+                message: `No articles found matching "${keyword}"`,
             });
         }
 
         return res.status(200).json({
             message: 'Search results',
-            data: articles
+            data: articles,
         });
     } catch (error) {
         next(error);
     }
 };
-
-
-
 
 module.exports = {
     postArticle,

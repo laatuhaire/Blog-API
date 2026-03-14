@@ -1,8 +1,9 @@
 const UserModel = require('../models/user.model');
 const joi = require('joi');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+//const jwt = require('jsonwebtoken');
 const { hashedPassword } = require('../utils/bcrypt.js'); 
+const { generateAccessToken } = require('../utils/jwt.js'); 
 
 //1 end point
 const registerUser = async (req, res, next) => {
@@ -53,12 +54,13 @@ const loginUser = async (req, res, next) => {
         if (!process.env.JWT_SECRET) {
             throw new Error('JWT_SECRET is not defined in environment variables');
         }
-
-        const token = jwt.sign(
-            { userId: user._id, name: user.name },
-            process.env.JWT_SECRET,
-            { expiresIn: '7d' }
-        );        
+        
+        const token = generateAccessToken(user);
+//        const token = jwt.sign(
+//            { userId: user._id, name: user.name },
+//            process.env.JWT_SECRET,
+//            { expiresIn: '7d' }
+//        );        
 
         const resUser = {
             id: user._id,

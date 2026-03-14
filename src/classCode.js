@@ -16,6 +16,7 @@ const token = jwt.sign(
     { expiresIn: '7d' } //options
 );
 
+
 const requireAuth = async (req, res, next) => {
     const authHeader = req.headers.authorization;
     

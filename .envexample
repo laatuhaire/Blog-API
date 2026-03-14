@@ -1,0 +1,14 @@
+PORT = 4 digits of your choice
+
+MONGODB_URI = yourDatabaseURLHere
+
+JWT_SECRET = yourLongSecretHere
+
+JWT_REFRESH_SECRET =yourLongSecretHere
+
+CLOUDINARY_NAME = name for cloudinary
+
+CLOUDINARY_KEY = key given in cloudinary
+
+CLOUDINARY_SECRET = provided by cloudinary
+
