@@ -9,14 +9,25 @@ TESTED USING POSTMAN ---
 
 Features
 User registration and login
-JWT authentication and protected routes
-Create, read, update, and delete blog posts
-Image upload support using Cloudinary
-Input validation for users and posts
-Logging middleware
+Secure authentication with JWT tokens
+Create blog articles
+Retrieve all articles with pagination
+Retrieve a single article
+Update articles
+Delete articles
+Search articles by keyword
+Image upload support
+Request logging middleware
 Centralized error handling
-Modular project structure
 
+--Tech Stack
+Node.js
+Express.js
+MongoDB
+JWT Authentication
+Joi Validation
+Multer (file uploads)
+Bcrypt (password hashing)
 
 blog-api/
 │
@@ -112,22 +123,75 @@ MONGO DB CONNECTED
 
 
 ////////API Endpoints
+API Endpoints
 Authentication
-Register a new user
+Register User
 POST /api/users/signup
-Login user
+Example request body
+{
+ "name": "John Doe",
+ "email": "john@example.com",
+ "password": "password123"
+}
+
+Login User
 POST /api/users/login
-Articles
-Get all articles
-GET /api/articles
-Get a single article
-GET /api/articles/:id
-Create an article (Protected)
+Example request body
+{
+ "email": "john@example.com",
+ "password": "password123"
+}
+
+Response
+{
+ "message": "Login successful",
+ "user": {
+   "id": "...",
+   "name": "John Doe",
+   "email": "john@example.com"
+ },
+ "token": "JWT_TOKEN"
+}
+
+Article Endpoints
+Create Article (Protected)
 POST /api/articles
-Update an article (Protected)
-PUT /api/articles/:id
-Delete an article (Protected)
-DELETE /api/articles/:id
+Header
+Authorization: Bearer TOKEN
+Example body
+{
+ "title": "My First Blog",
+ "content": "This is the content of my first article",
+ "author": "John Doe"
+}
+
+Get All Articles
+GET /api/articles
+Supports pagination
+Example
+/api/articles?page=1&limit=10
+
+Get Article by ID
+GET /api/articles/
+
+Update Article
+PUT /api/articles/
+
+Delete Article
+DELETE /api/articles/
+
+Search Articles
+GET /api/articles/search?keyword=node
+Returns articles that match the keyword in title or content.
+
+File Upload
+Upload image
+POST /api/users/upload
+Form-data
+image : file
+Handled using Multer middleware.
+
+
 
 ////Authentication
 Protected routes require a JWT token.
@@ -136,11 +200,12 @@ Authorization: Bearer YOUR_TOKEN
 
 ///////////Testing
 All endpoints were tested using Postman.
+
 Example tests include:
 User signup
 User login
-Creating blog posts
-Retrieving articles
+Creating blog articles
+Searching articles
 Updating articles
 Deleting articles
 
